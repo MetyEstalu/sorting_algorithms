@@ -1,59 +1,56 @@
 #include "sort.h"
-
 /**
- * insertion_sort_list - sorts list with insertion sort
- * @list: input list to sort
+ * swap - swap 2 element in an list
+ * @head: head of list
+ * @a: node
+ * @b: node
+ */
+void swap(listint_t *a, listint_t *b, listint_t **head)
+{
+	listint_t *aux1 = NULL, *aux2 = NULL;
+
+	if (a == NULL || b == NULL)
+		return;
+	aux1 = a->prev;
+	aux2 = b->next;
+	/* if nodes are adjacent*/
+	if (aux1)
+		aux1->next = b;
+	if (aux2)
+		aux2->prev = a;
+	a->next = aux2;
+	a->prev = b;
+	b->next = a;
+	b->prev = aux1;
+	if (aux1 == NULL)
+		*head = b;
+}
+/**
+ * insertion_sort_list  - insertion_sort_list
+ * @list: doubly liked list
+ *
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *temp, *pn, *nxt;
+	listint_t *head, *prev;
+	int value;
 
-	if (list && *list && (*list)->next)
+	if (list == NULL || (*list)->next == NULL || (*list) == NULL)
 	{
-		temp = (*list)->next;
-		pn = temp->prev;
-		nxt = temp->next;
-
-		while (temp)
-		{
-			if (temp->n < pn->n)
-			{
-				swap_list(pn, temp, nxt, list);
-			}
-			temp = nxt;
-			if (temp)
-			{
-				nxt = temp->next;
-				pn = temp->prev;
-			}
-		}
+		return;
 	}
-}
-
-/**
- * swap_list - swaps the position of two nodes in a linked list
- * @pn: previous node
- * @temp: temp
- * @nxt: next node
- * @h: head of list
- */
-void swap_list(listint_t *pn, listint_t *temp, listint_t *nxt, listint_t **h)
-{
-
-	while (pn && temp->n < pn->n)
+	head = *list;
+	while (head)
 	{
-		if (nxt)
-			nxt->prev = pn;
-		temp->next = pn;
-		temp->prev = pn->prev;
-		if (pn->prev)
-			(pn->prev)->next = temp;
-		pn->prev = temp;
-		pn->next = nxt;
-		nxt = pn;
-		pn = temp->prev;
-		if ((*h)->prev)
-			*h = (*h)->prev;
-		print_list(*h);
+		prev = head->prev;
+				value = head->n;
+
+		while (prev && prev->n > value)
+		{
+			swap(prev, head, list);
+			print_list(*list);
+			prev = head->prev;
+		}
+		head = head->next;
 	}
 }

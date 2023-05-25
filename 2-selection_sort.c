@@ -1,48 +1,55 @@
 #include "sort.h"
-void swap_int(int *a, int *b);
+
 /**
-* selection_sort - a function that sorts an array of integers in ascending
-* order using the selection sort algorithm
-* @array: array of integers
-* @size: size of array
-**/
+ * locate_min - Locatin the min From Current index in the array
+ * @array: The Array to be Searched
+ * @index: Starting Index of The Search
+ * @size: The Size of The Array
+ * Return: (int) index of min if found or
+ * same given index if index is the min
+ */
+
+int locate_min(int *array, int index, size_t size)
+{
+	int min, idx_min;
+	int i;
+
+	min = array[index];
+	idx_min = index;
+	for (i = index; i < (int)size; i++)
+	{
+		if (array[i] < min)
+		{
+			min = array[i];
+			idx_min = i;
+		}
+	}
+	if (idx_min == index)
+		return (-1);
+	return (idx_min);
+}
+
+/**
+ * selection_sort - Implementation of selection Sort Algrithme
+ * @array: Array to sort type int *
+ * @size: The Size of The Given Array
+ *
+ * Return: (Void) Sorted Array
+ */
 void selection_sort(int *array, size_t size)
 {
-	size_t j, i;
-	int *temp;
+	int i;
+	int min, tmp;
 
-	temp = NULL;
-	for (j = 0; array && j < size - 1; j++)
+	for (i = 0; i < (int)size; i++)
 	{
-		temp = NULL;
-		for (i = j + 1; i < size; i++)
+		min = locate_min(array, i, size);
+		if (min != -1)
 		{
-			if (array[i] < array[j])
-			{
-				if (temp && array[i] < *temp)
-					temp = &array[i];
-				if (!temp)
-					temp = &array[i];
-			}
-		}
-		if (temp)
-		{
-			swap_int(temp, &array[j]);
+			tmp = array[i];
+			array[i] = array[min];
+			array[min] = tmp;
 			print_array(array, size);
 		}
 	}
 }
-/**
-* swap_int - swaps the values of two integers
-* @a: take an int
-* @b: take an int
-**/
-void swap_int(int *a, int *b)
-{
-	int temp;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
